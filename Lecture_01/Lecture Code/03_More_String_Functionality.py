@@ -6,7 +6,7 @@ S2 = S1[10:15]
 print(S2)
 print(S1.find('i'))
 print(S1.find('slice'))
-print(S1.lower)
+print(S1.lower())
 print(S1.upper())
 print(S1.replace('slice','****'))
 print(S1.startswith('a'))
