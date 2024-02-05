@@ -17,8 +17,6 @@ string1 = "I am still"
 string2 = "learning Python"
 print_common_chars(string1, string2)
 
-print('Source: I used ChatGPT to help me build this code.')
-
 print(20 * '-' + 'End Q1' + 20 * '-')
 # =================================================================
 # Class_Ex2:
@@ -47,8 +45,6 @@ print(f"Custom function count: {result_custom}")
 result_builtin = input_string.count(target_letter)
 print(f"Builtin count method: {result_builtin}")
 
-print('Source: I used ChatGPT to help me build this code.')
-
 print(20 * '-' + 'End Q2' + 20 * '-')
 # =================================================================
 # Class_Ex3:
@@ -63,7 +59,7 @@ stringStory = 'The {Border Collie} is a British breed of herding dog of the coll
     descends from the {traditional sheepdogs} once found all over the {British Isles}. \
     It is kept mostly as a {working sheep-herding dog} or as a {companion animal}. \
     It competes with success in {sheepdog trials}. It has been claimed that it is \
-    the most {intelligent} breed of dog.'
+    the most {intelligent} breed of dog (Source: Wikipedia).'
 
 def find_curly_bracket_strings(stringStory):
     start_index = 0
@@ -88,8 +84,6 @@ def find_curly_bracket_strings(stringStory):
 found_strings = find_curly_bracket_strings(stringStory)
 print("Strings in curly brackets:", found_strings)
 
-print('Source: I used ChatGPT to help me build this code.')
-
 print(20 * '-' + 'End Q3' + 20 * '-')
 # =================================================================
 # Class_Ex4:
@@ -110,8 +104,6 @@ first_n_lines = read_first_n_lines(file_path, n)
 for line in first_n_lines:
     print(line)
 
-print('Source: I used ChatGPT to help me build this code.')
-
 print(20 * '-' + 'End Q4' + 20 * '-')
 # =================================================================
 # Class_Ex5:
@@ -130,8 +122,6 @@ lines_list = read_file_lines(file_path)
 
 for line in lines_list:
     print(line)
-
-print('Source: I used ChatGPT to help me build this code.')
 
 print(20 * '-' + 'End Q5' + 20 * '-')
 # =================================================================
@@ -159,8 +149,6 @@ combined_lines_list = combine_lines(file1_path, file2_path)
 for combined_line in combined_lines_list:
     print(combined_line)
 
-print('Source: I used ChatGPT to help me build this code.')
-
 print(20 * '-' + 'End Q6' + 20 * '-')
 # =================================================================
 # Class_Ex7:
@@ -185,8 +173,6 @@ def function(n):
 n = 3
 function(n)
 
-print('Source: I used ChatGPT to help me build this code.')
-
 print(20 * '-' + 'End Q7' + 20 * '-')
 # =================================================================
 # Class_Ex8:
@@ -206,8 +192,6 @@ file_path = "test_1.txt"
 result = count_words_in_file(file_path)
 print(f"Number of words in the file: {result}")
 
-print('Source: I used ChatGPT to help me build this code.')
-
 print(20 * '-' + 'End Q8' + 20 * '-')
 # =================================================================
 # Class_Ex9:
@@ -223,8 +207,6 @@ cnt = Counter({'o': 3, 'g': 2, 'f': 1})
 result = list(cnt.elements())
 
 print("Sample Output =", result)
-
-print('Source: I used ChatGPT to help me build this code.')
 
 print(20 * '-' + 'End Q9' + 20 * '-')
 # =================================================================
@@ -248,8 +230,6 @@ print("Original Deque:", deq)
 index_to_start_over = 4
 deq.rotate(-index_to_start_over)
 print("New Deque:", deq)
-
-print('Source: I used ChatGPT to help me build this code.')
 
 print(20 * '-' + 'End Q10' + 20 * '-')
 # =================================================================
@@ -283,8 +263,6 @@ def find_directories_files(path):
 path_to_search = "C:\\Users\Bailey"
 find_directories_files(path_to_search)
 
-print('Source: I used ChatGPT to help me build this code.')
-
 print(20 * '-' + 'End Q11' + 20 * '-')
 # =================================================================
 # Class_Ex12:
@@ -312,8 +290,6 @@ except FileExistsError:
     print(f"A file with the name '{new_file_name}' already exists. Please choose a different name.")
 except PermissionError:
     print(f"Permission error while trying to rename the file.")
-
-print('Source: I used ChatGPT to help me build this code.')
 
 print(20 * '-' + 'End Q12' + 20 * '-')
 # =================================================================
