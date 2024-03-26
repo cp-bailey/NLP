@@ -491,9 +491,99 @@ print(20 * '-' + 'End Q5' + 20 * '-')
 # ----------------------------------------------------------------
 print(20 * '-' + 'Begin Q6' + 20 * '-')
 
+import tensorflow as tf
+import pandas as pd
+from tensorflow.keras.preprocessing.text import Tokenizer
+from tensorflow.keras.preprocessing.sequence import pad_sequences
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+import re
+
+# Load the dataset
+df = pd.read_csv("data_set.csv")
+
+# Assuming "text" is the column containing the text data
+texts = df['text'].tolist()
+
+# Preprocess text data
+def preprocess_text(text):
+    # Lowercasing
+    text = text.lower()
+    # Remove special characters and digits
+    text = re.sub(r'[^a-z\s]', '', text)
+    # Tokenization
+    tokens = word_tokenize(text)
+    # Remove stopwords
+    stop_words = set(stopwords.words('english'))
+    tokens = [word for word in tokens if word not in stop_words]
+    # Lemmatization
+    lemmatizer = WordNetLemmatizer()
+    tokens = [lemmatizer.lemmatize(word) for word in tokens]
+    return tokens
+
+# Apply text preprocessing
+processed_texts = [preprocess_text(text) for text in texts]
+
+# Tokenize the preprocessed text
+tokenizer = Tokenizer()
+tokenizer.fit_on_texts(processed_texts)
+
+# Convert text to sequences of word indexes
+sequences = tokenizer.texts_to_sequences(processed_texts)
+
+# Pad sequences to a fixed length (adjust maxlen as needed)
+maxlen = 100  # Example maximum sequence length
+padded_sequences = pad_sequences(sequences, maxlen=maxlen, padding='post')
 
 
+class Autoencoder(tf.keras.Model):
+    def __init__(self, vocab_size, embedding_dim, hidden_dim):
+        super(Autoencoder, self).__init__()
+        self.vocab_size = vocab_size
+        self.embedding_dim = embedding_dim
+        self.hidden_dim = hidden_dim
 
+        # Encoder layers
+        self.encoder_embedding = tf.keras.layers.Embedding(vocab_size, embedding_dim)
+        self.encoder_hidden = tf.keras.layers.Dense(hidden_dim, activation='relu')
+
+        # Decoder layers
+        self.decoder_hidden = tf.keras.layers.Dense(embedding_dim, activation='relu')
+        self.decoder_embedding = tf.keras.layers.Dense(vocab_size, activation='softmax')
+
+    def call(self, inputs):
+        # Encoder
+        encoded = self.encoder_embedding(inputs)
+        encoded = self.encoder_hidden(encoded)
+
+        # Decoder
+        decoded = self.decoder_hidden(encoded)
+        decoded = self.decoder_embedding(decoded)
+
+        return decoded
+
+
+# Example usage:
+# Define hyperparameters
+vocab_size = 10000  # Example vocabulary size
+embedding_dim = 30  # Dimension of word embeddings
+hidden_dim = 50  # Dimension of the hidden layer
+
+# Create an instance of the autoencoder model
+model = Autoencoder(vocab_size, embedding_dim, hidden_dim)
+
+# Compile the model
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy')
+
+# Define callbacks for printing metrics
+class PrintMetricsCallback(tf.keras.callbacks.Callback):
+    def on_epoch_end(self, epoch, logs=None):
+        print(f"Epoch {epoch+1}/{self.params['epochs']}, Loss: {logs['loss']}")
+
+# Train the model with your dataset
+# Use padded_sequences as X_train
+model.fit(padded_sequences, padded_sequences, epochs=10, batch_size=32, callbacks=[PrintMetricsCallback()])
 
 print(20 * '-' + 'End Q6' + 20 * '-')
 
@@ -514,6 +604,101 @@ print(20 * '-' + 'End Q6' + 20 * '-')
 # ----------------------------------------------------------------
 print(20 * '-' + 'Begin Q7' + 20 * '-')
 
+import numpy as np
+
+
+class Word2Vec:
+    def __init__(self, vocab_size, embedding_dim, learning_rate):
+        self.vocab_size = vocab_size
+        self.embedding_dim = embedding_dim
+        self.learning_rate = learning_rate
+
+        # Initialize weights
+        self.W1 = np.random.randn(embedding_dim, vocab_size)
+        self.W2 = np.random.randn(vocab_size, embedding_dim)
+
+    def forward(self, input_word):
+        self.input_word = input_word
+        self.hidden_layer = np.dot(self.W1, input_word)
+        self.output_layer = np.dot(self.W2, self.hidden_layer)
+        return self.output_layer
+
+    def backward(self, target_word):
+        error = np.mean(np.square(self.output_layer - target_word))
+        grad_output = 2 * (self.output_layer - target_word) / target_word.shape[0]
+        grad_W2 = np.outer(grad_output, self.hidden_layer)
+        grad_hidden = np.dot(self.W2.T, grad_output)
+        grad_W1 = np.outer(grad_hidden, self.input_word)
+
+        # Update weights
+        self.W1 -= self.learning_rate * grad_W1
+        self.W2 -= self.learning_rate * grad_W2
+
+        return error
+
+    def train(self, input_words, target_words, epochs):
+        for epoch in range(epochs):
+            total_error = 0
+            for i in range(len(input_words)):
+                input_word = input_words[i]
+                target_word = target_words[i]
+
+                # Forward pass
+                self.forward(input_word)
+
+                # Backward pass and weight update
+                error = self.backward(target_word)
+                total_error += error
+
+            avg_error = total_error / len(input_words)
+            print(f"Epoch {epoch + 1}/{epochs}, Average Error: {avg_error}")
+
+    def word_embeddings(self):
+        return self.W1.T  # Return the transpose of W1 as word embeddings
+
+
+# Example usage
+def main():
+    # Sample text data
+    text = "natural language processing and machine learning are fun and exciting"
+
+    # Preprocessing
+    words = text.lower().split()
+    vocab = sorted(set(words))
+    word_to_index = {w: i for i, w in enumerate(vocab)}
+    index_to_word = {i: w for i, w in enumerate(vocab)}
+
+    # Generate training data
+    window_size = 2 # Change this value to vary window size (i.e., the context in which a word is considered during training)
+    training_data = []
+    for i in range(len(words)):
+        for j in range(max(0, i - window_size), min(len(words), i + window_size + 1)):
+            if i != j:
+                training_data.append((word_to_index[words[i]], word_to_index[words[j]]))
+
+    # Convert training data to numpy arrays
+    input_words = np.zeros((len(training_data), len(vocab)))
+    target_words = np.zeros((len(training_data), len(vocab)))
+    for i, (input_index, target_index) in enumerate(training_data):
+        input_words[i, input_index] = 1
+        target_words[i, target_index] = 1
+
+    # Hyperparameters
+    vocab_size = len(vocab)
+    embedding_dim = 20 # Change this value to vary hidden dimensions (i.e., dimensionality of the learned word embeddings)
+    learning_rate = 0.01
+    epochs = 100
+
+    # Initialize and train Word2Vec model
+    model = Word2Vec(vocab_size, embedding_dim, learning_rate)
+    model.train(input_words, target_words, epochs)
+
+    # Get word embeddings
+    word_embeddings = model.word_embeddings()
+
+    # Print word embeddings
+    for i, embedding in enumerate(word_embeddings):
+        print(f"Word: {index_to_word[i]}, Embedding: {embedding}")
 
 
 print(20 * '-' + 'End Q7' + 20 * '-')
