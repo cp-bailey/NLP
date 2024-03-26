@@ -13,5 +13,5 @@ text1 = text[0:]
 bigrams = nltk.bigrams(text)
 print(list(nltk.bigrams(text1))[0:20])
 cfd = nltk.ConditionalFreqDist(bigrams)
-print(cfd['living'])
+print(cfd['living']) # samples = unique words, outcomes = total occurrences
 generate_model(cfd, 'living')

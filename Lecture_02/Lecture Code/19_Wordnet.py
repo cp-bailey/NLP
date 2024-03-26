@@ -12,6 +12,7 @@ for synset in wn.synsets('car'):
     print(synset.lemma_names())
 print(wn.lemmas('car'))
 
+print('START HERE')
 motorcar = wn.synset('car.n.01'); print(motorcar)
 types_of_motorcar = motorcar.hyponyms()
 sorted(lemma.name() for synset in types_of_motorcar for lemma in synset.lemmas())

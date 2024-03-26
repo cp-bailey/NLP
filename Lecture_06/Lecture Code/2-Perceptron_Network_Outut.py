@@ -27,6 +27,7 @@ b = np.array([[1],
 
 n = np.array([W @ x.reshape(-1,1) + b for x in p])
 a= hardlim(n)
+print(a)
 
 plt.figure()
 for i in range(len(a)):
