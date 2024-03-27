@@ -10,4 +10,4 @@ nltk.download('stopwords')
 
 nltk.download('wordnet')
 
-nltk.download('all')
+# nltk.download('all')
